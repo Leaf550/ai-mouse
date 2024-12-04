@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const testDebut = () => {
   console.log(window.mainProcTypes.TestEnum.Test1)
+  console.log(window.mainProcTypes.TestEnum.Test2)
 }
 </script>
 
