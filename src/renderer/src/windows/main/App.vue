@@ -1,14 +1,27 @@
 <script setup lang="ts">
-import Versions from './components/Versions.vue'
+import Versions from '@renderer/components/Versions.vue';
 
 const ipcHandle = () => {
-  window.electron.ipcRenderer.send('ping')
-  console.log(window.types.TestEnum.Test1)
+  interface TestRes {
+    total?: number
+  }
+  
+  window.netAPIs.net.get<TestRes>("/")
+    .then((res) => {
+      console.log(res)
+      console.log(res.data.total ?? 0)
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+    .finally(() => {
+      console.log("test get finish")
+    })
 }
 </script>
 
 <template>
-  <img alt="logo" class="logo" src="./assets/electron.svg" />
+  <img alt="logo" class="logo" src="@renderer/assets/electron.svg" />
   <div class="creator">Powered by electron-vite</div>
   <div class="text">
     Build an Electron app with
@@ -22,7 +35,7 @@ const ipcHandle = () => {
       <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">Documentation</a>
     </div>
     <div class="action">
-      <a target="_blank" rel="noreferrer" @click="ipcHandle">Send IPC</a>
+      <a target="_blank" rel="noreferrer" @click="ipcHandle">Test netAPIs</a>
     </div>
   </div>
   <Versions />

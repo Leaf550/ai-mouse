@@ -1,5 +1,5 @@
 appId: com.electron.app
-productName: electron-vue-module-test
+productName: electron-vue-template
 directories:
   buildResources: build
 files:
@@ -12,7 +12,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: electron-vue-module-test
+  executableName: electron-vue-template
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}

@@ -1,28 +1,19 @@
 import { contextBridge } from 'electron'
-import { electronAPI } from '@electron-toolkit/preload'
-import { TestEnum } from '../types/TestExport'
+import { netAPIs } from './NetAPIs'
+import { mainProcTypes } from './MainProcTypes'
+import { Versions } from './Versions'
 
-// Custom APIs for renderer
-const api = {}
-
-const types = {
-  TestEnum
-}
-
-// Use `contextBridge` APIs to expose Electron APIs to
-// renderer only if context isolation is enabled, otherwise
-// just add to the DOM global.
 if (process.contextIsolated) {
   try {
-    contextBridge.exposeInMainWorld('electron', electronAPI)
-    contextBridge.exposeInMainWorld('api', api)
-    contextBridge.exposeInMainWorld('types', types)
+    contextBridge.exposeInMainWorld('netAPIs', netAPIs)
+    contextBridge.exposeInMainWorld('mainProcTypes', mainProcTypes)
+    contextBridge.exposeInMainWorld('versions', Versions)
   } catch (error) {
     console.error(error)
   }
 } else {
   // @ts-ignore (define in dts)
-  window.electron = electronAPI
+  window.netAPIs = netAPIs
   // @ts-ignore (define in dts)
-  window.api = api
+  window.mainProcTypes = mainProcTypes
 }

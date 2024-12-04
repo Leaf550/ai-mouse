@@ -15,6 +15,14 @@ export default defineConfig({
         '@renderer': resolve('src/renderer/src')
       }
     },
-    plugins: [vue()]
+    plugins: [vue()],
+    build: {
+      rollupOptions: {
+        input: {
+          mainWindow: resolve(__dirname, 'src/renderer/src/windows/main/main.html'),
+          floatingWindow: resolve(__dirname, 'src/renderer/src/windows/voice-floating/voice-floating.html')
+        }
+      }
+    }
   }
 })
