@@ -1,4 +1,4 @@
-import { electronAPI } from "@electron-toolkit/preload";
+import { electronAPI } from '@electron-toolkit/preload'
 
 export const Versions = {
   electronVersion: electronAPI.process.versions.electron,

@@ -5,8 +5,8 @@ const testDebut = () => {
 </script>
 
 <template>
-  <div> test div </div>
-  <button @click="testDebut"> test print Main ipc enum </button>
+  <div>test div</div>
+  <button @click="testDebut">test print Main ipc enum</button>
 </template>
 
 <style scoped></style>

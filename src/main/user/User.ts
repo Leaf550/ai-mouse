@@ -1,4 +1,4 @@
-import { IPCMainProcessor } from "../ipc/IPCMainProcessor"
+import { IPCMainProcessor } from '../ipc/IPCMainProcessor'
 
 interface UserInfo {
   userID: number
@@ -27,23 +27,24 @@ export class User implements IPCMainProcessor {
   }
 
   public isLogin() {
-    return (
-      this.token !== undefined
-      && (this.userInfo?.exp ?? 0) > parseInt(`${Date.now() / 1000}`)
-    )
+    return this.token !== undefined && (this.userInfo?.exp ?? 0) > parseInt(`${Date.now() / 1000}`)
   }
 
   private parseToken() {
-    if (this.token === undefined) { return }
-    const tokenParts = this.token.split(".")
-    if (tokenParts.length < 3) { return }
+    if (this.token === undefined) {
+      return
+    }
+    const tokenParts = this.token.split('.')
+    if (tokenParts.length < 3) {
+      return
+    }
     const tokenPayload = tokenParts[1]
-    const tokenInfo = JSON.parse(Buffer.from(tokenPayload, "base64").toString("ascii"))
+    const tokenInfo = JSON.parse(Buffer.from(tokenPayload, 'base64').toString('ascii'))
     this.userInfo = tokenInfo as UserInfo
   }
 
   // IPCMainProcessor implements
   registerIPC(): void {
-    
+    // To do
   }
 }

@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import Versions from '@renderer/components/Versions.vue';
+import Versions from '@renderer/components/Versions.vue'
 
 const ipcHandle = () => {
   interface TestRes {
     total?: number
   }
-  
-  window.netAPIs.net.get<TestRes>("/")
+
+  window.netAPIs.net
+    .get<TestRes>('/')
     .then((res) => {
       console.log(res)
       console.log(res.data.total ?? 0)
@@ -15,7 +16,7 @@ const ipcHandle = () => {
       console.error(err)
     })
     .finally(() => {
-      console.log("test get finish")
+      console.log('test get finish')
     })
 }
 </script>

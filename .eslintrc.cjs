@@ -15,10 +15,9 @@ module.exports = {
     'vue/multi-word-component-names': 'off'
   },
   plugins: ['html'],
-  overrids: [
+  overrides: [
     {
-      files: ['*.html'],
-      processor: 'html/html'
+      files: ['*.html']
     }
   ]
 }

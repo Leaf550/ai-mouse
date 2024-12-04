@@ -1,4 +1,4 @@
-import { BrowserWindow, shell } from "electron"
+import { BrowserWindow, shell } from 'electron'
 import icon from '../../../resources/icon.png?asset'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'

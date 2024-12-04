@@ -1,17 +1,17 @@
-import axios from "axios"
-import { ipcMain } from "electron"
-import { User } from "../user/User"
-import { IPCMainProcessor } from "../ipc/IPCMainProcessor"
+import axios from 'axios'
+import { ipcMain } from 'electron'
+import { User } from '../user/User'
+import { IPCMainProcessor } from '../ipc/IPCMainProcessor'
 
 export class Reqeusts implements IPCMainProcessor {
-  private baseURL = "https://4759fc12293542de9f68347241c36841.api.mockbin.io"
+  private baseURL = 'https://4759fc12293542de9f68347241c36841.api.mockbin.io'
 
   private axiosInstance = (() => {
     const instance = axios.create({
       baseURL: this.baseURL,
       headers: {
-        "Authorization": `Bearer ${User.shared().token ?? ""}`,
-        "Content-Type": "application/json"
+        Authorization: `Bearer ${User.shared().token ?? ''}`,
+        'Content-Type': 'application/json'
       }
     })
     return instance
@@ -23,12 +23,12 @@ export class Reqeusts implements IPCMainProcessor {
     return this.instance
   }
 
-  private async get(url: string, params: any) {
+  private async get(url: string, params: Record<string, unknown>) {
     const res = await this.axiosInstance.get(url, params)
     return res.data
   }
 
-  private async post(url: string, data: any) {
+  private async post(url: string, data: Record<string, unknown>) {
     const res = await this.axiosInstance.post(url, data)
     return res.data
   }
@@ -36,7 +36,7 @@ export class Reqeusts implements IPCMainProcessor {
   private async postFile(url: string, data: FormData) {
     const res = await this.axiosInstance.post(url, data, {
       headers: {
-        "Content-Type": "multipart/form-data"
+        'Content-Type': 'multipart/form-data'
       }
     })
     return res.data
@@ -44,15 +44,15 @@ export class Reqeusts implements IPCMainProcessor {
 
   // IPCMainProcessor implements
   registerIPC() {
-    ipcMain.handle("ipcAPIs.net.get", (_event, url, params) => {
+    ipcMain.handle('ipcAPIs.net.get', (_event, url, params) => {
       return this.get(url, params)
     })
 
-    ipcMain.handle("ipcAPIs.net.post", (_event, url, data) => {
+    ipcMain.handle('ipcAPIs.net.post', (_event, url, data) => {
       return this.post(url, data)
     })
 
-    ipcMain.handle("ipcAPIs.net.postFile", (_event, url, formData) => {
+    ipcMain.handle('ipcAPIs.net.postFile', (_event, url, formData) => {
       return this.postFile(url, formData)
     })
   }
