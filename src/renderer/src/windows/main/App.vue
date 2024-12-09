@@ -6,7 +6,7 @@ const ipcHandle = () => {
     total?: number
   }
 
-  window.netAPIs.net
+  window.netAPIs
     .get<TestRes>('/')
     .then((res) => {
       console.log(res)
@@ -18,6 +18,10 @@ const ipcHandle = () => {
     .finally(() => {
       console.log('test get finish')
     })
+
+  window.userAPIs.getUser().then((user) => {
+    console.log(user)
+  })
 }
 </script>
 
@@ -30,6 +34,7 @@ const ipcHandle = () => {
     and
     <span class="ts">TypeScript</span>
   </div>
+  ``
   <p class="tip">Please try pressing <code>F12</code> to open the devTool</p>
   <div class="actions">
     <div class="action">

@@ -1,8 +1,5 @@
 import { TestEnum } from '../types/TestExport'
-
-interface ipcAPIsType {
-  net: ipcNetAPI
-}
+import { UserInfo } from '../main/user/User'
 
 interface Response<Data> {
   code: number
@@ -10,10 +7,14 @@ interface Response<Data> {
   message: string
 }
 
-interface ipcNetAPI {
-  get: <D>(url: string, params?: unknown) => Promise<Response<D>>
-  post: <D>(url: string, data?: unknown) => Promise<Response<D>>
+interface NetAPIs {
+  get: <D>(url: string, params?: Record<string, unknown>) => Promise<Response<D>>
+  post: <D>(url: string, data?: Record<string, unknown>) => Promise<Response<D>>
   postFile: <D>(url: string, data?: FormData) => Promise<Response<D>>
+}
+
+interface UserAPIs {
+  getUser: () => Promise<UserInfo>
 }
 
 interface Versions {
@@ -28,7 +29,8 @@ interface MainProcTypes {
 
 declare global {
   interface Window {
-    netAPIs: ipcAPIsType
+    netAPIs: NetAPIs
+    userAPIs: UserAPIs
     versions: Versions
     mainProcTypes: MainProcTypes
   }

@@ -1,6 +1,7 @@
+import { ipcMain } from 'electron'
 import { IPCMainProcessor } from '../ipc/IPCMainProcessor'
 
-interface UserInfo {
+export interface UserInfo {
   userID: number
   name: string
   iat: number
@@ -8,7 +9,12 @@ interface UserInfo {
 }
 
 export class User implements IPCMainProcessor {
-  userInfo?: UserInfo
+  userInfo?: UserInfo = {
+    userID: 1,
+    name: 'fyh',
+    iat: 123,
+    exp: 234
+  }
   private _token?: string
 
   private static instance = new User()
@@ -45,6 +51,8 @@ export class User implements IPCMainProcessor {
 
   // IPCMainProcessor implements
   registerIPC(): void {
-    // To do
+    ipcMain.handle('ipcAPIs.user.getUser', () => {
+      return this.userInfo
+    })
   }
 }
