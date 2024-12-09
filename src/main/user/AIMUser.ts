@@ -1,15 +1,15 @@
 import { ipcMain } from 'electron'
 import { IPCMainProcessor } from '../ipc/IPCMainProcessor'
 
-export interface UserInfo {
+export interface AIMUserInfo {
   userID: number
   name: string
   iat: number
   exp: number
 }
 
-export class User implements IPCMainProcessor {
-  userInfo?: UserInfo = {
+export class AIMUser implements IPCMainProcessor {
+  userInfo?: AIMUserInfo = {
     userID: 1,
     name: 'fyh',
     iat: 123,
@@ -17,7 +17,7 @@ export class User implements IPCMainProcessor {
   }
   private _token?: string
 
-  private static instance = new User()
+  private static instance = new AIMUser()
 
   public static shared() {
     return this.instance
@@ -46,7 +46,7 @@ export class User implements IPCMainProcessor {
     }
     const tokenPayload = tokenParts[1]
     const tokenInfo = JSON.parse(Buffer.from(tokenPayload, 'base64').toString('ascii'))
-    this.userInfo = tokenInfo as UserInfo
+    this.userInfo = tokenInfo as AIMUserInfo
   }
 
   // IPCMainProcessor implements

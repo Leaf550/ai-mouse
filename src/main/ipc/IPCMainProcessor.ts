@@ -1,12 +1,12 @@
-import { Reqeusts } from '../requests/Requests'
-import { User } from '../user/User'
+import { AIMReqeusts } from '../requests/AIMRequests'
+import { AIMUser } from '../user/AIMUser'
 
 export interface IPCMainProcessor {
   registerIPC(): void
 }
 
 export class IPCMainProcessorManager {
-  private static processors: IPCMainProcessor[] = [Reqeusts.shared(), User.shared()]
+  private static processors: IPCMainProcessor[] = [AIMReqeusts.shared(), AIMUser.shared()]
 
   public static registerProcessors() {
     for (const p of this.processors) {

@@ -1,5 +1,5 @@
 import { TestEnum } from '../types/TestExport'
-import { UserInfo } from '../main/user/User'
+import { AIMUserInfo } from '../main/user/AIMUser'
 
 interface Response<Data> {
   code: number
@@ -14,7 +14,7 @@ interface NetAPIs {
 }
 
 interface UserAPIs {
-  getUser: () => Promise<UserInfo>
+  getUser: () => Promise<AIMUserInfo>
 }
 
 interface Versions {

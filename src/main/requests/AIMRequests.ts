@@ -1,23 +1,23 @@
 import axios from 'axios'
 import { ipcMain } from 'electron'
-import { User } from '../user/User'
+import { AIMUser } from '../user/AIMUser'
 import { IPCMainProcessor } from '../ipc/IPCMainProcessor'
 
-export class Reqeusts implements IPCMainProcessor {
+export class AIMReqeusts implements IPCMainProcessor {
   private baseURL = 'https://4759fc12293542de9f68347241c36841.api.mockbin.io'
 
   private axiosInstance = (() => {
     const instance = axios.create({
       baseURL: this.baseURL,
       headers: {
-        Authorization: `Bearer ${User.shared().token ?? ''}`,
+        Authorization: `Bearer ${AIMUser.shared().token ?? ''}`,
         'Content-Type': 'application/json'
       }
     })
     return instance
   })()
 
-  private static instance = new Reqeusts()
+  private static instance = new AIMReqeusts()
 
   public static shared() {
     return this.instance
