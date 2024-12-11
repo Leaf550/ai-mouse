@@ -34,7 +34,6 @@ const ipcHandle = () => {
     and
     <span class="ts">TypeScript</span>
   </div>
-  ``
   <p class="tip">Please try pressing <code>F12</code> to open the devTool</p>
   <div class="actions">
     <div class="action">

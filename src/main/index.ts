@@ -3,6 +3,7 @@ import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { IPCMainProcessorManager } from './ipc/IPCMainProcessor'
 import { createMainWindow } from './windows/MainWindow'
 import { createVoiceFloatingWindow } from './windows/VoiceFloatingWindow'
+import { MainProcessMouseConnector } from './mouse-connection/MainProcessMouseConnector'
 
 app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.electron')
@@ -12,7 +13,8 @@ app.whenReady().then(() => {
   })
 
   createMainWindow()
-  createVoiceFloatingWindow()
+  const voiceFloatingWindow = createVoiceFloatingWindow()
+  MainProcessMouseConnector.shared().setPermissionForDevicesIn(voiceFloatingWindow)
 
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) {

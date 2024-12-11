@@ -22,7 +22,9 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx,vue}": ["eslint --max-warnings=0"]
+    "**/*.{js,jsx,ts,tsx,vue}": [
+      "eslint --max-warnings=0"
+    ]
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.0",
@@ -35,6 +37,9 @@
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@rushstack/eslint-patch": "^1.10.3",
     "@types/node": "^20.14.8",
+    "@types/w3c-web-hid": "^1.0.6",
+    "@types/w3c-web-usb": "^1.0.10",
+    "@types/web-bluetooth": "^0.0.20",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/eslint-config-prettier": "^9.0.0",
     "@vue/eslint-config-typescript": "^13.0.0",
