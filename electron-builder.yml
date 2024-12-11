@@ -1,5 +1,5 @@
 appId: com.electron.app
-productName: electron-vue-template
+productName: AIMouse
 directories:
   buildResources: build
 files:
@@ -12,7 +12,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: electron-vue-template
+  executableName: AIMouse
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}

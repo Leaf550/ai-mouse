@@ -1,4 +1,4 @@
-# electron-vue-template
+# ai-mouse
 
 An Electron application with Vue and TypeScript
 
