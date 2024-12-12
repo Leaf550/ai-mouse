@@ -1,10 +1,6 @@
-import { AIBluetoothMouse, AIHIDMouse } from './AIMouse'
-import { MicLinkHIDAIMouse } from './mic-link/MicLinkHIDAIMouse'
-
-export abstract class AIMouseFactory {
-  public abstract getHIDAIMouseBy(hidDevice: HIDDevice): AIHIDMouse
-  public abstract getBluetoothAIMouseBy(bluetoothDevice: BluetoothDevice): AIBluetoothMouse
-}
+import { AIBluetoothMouse, AIHIDMouse } from '../base/device/AIMouse'
+import { AIMouseFactory } from '../base/device/AIMouseFactory'
+import { MicLinkHIDAIMouse } from './MicLinkHIDAIMouse'
 
 export class MicLinkAIMouseFactory extends AIMouseFactory {
   public getHIDAIMouseBy(hidDevice: HIDDevice): AIHIDMouse {

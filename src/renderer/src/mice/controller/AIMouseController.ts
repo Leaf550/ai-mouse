@@ -1,5 +1,5 @@
-import { AIMouseConnectionManager } from '../connection/AIMouseConnectionManager'
-import { AIMouse } from '../device/AIMouse'
+import { AIMouseConnectionManager } from './AIMouseConnectionManager'
+import { AIMouse } from '../base/device/AIMouse'
 
 export class AIMouseController {
   private static instance: AIMouseController
@@ -39,8 +39,13 @@ export class AIMouseController {
     this.connectionManager.startConnect()
   }
 
+  public sendDataToDevice(data: Uint8Array) {
+    this.mouse?.sendData(data)
+  }
+
   private onMouseConnected(mouse: AIMouse) {
     this.mouse = mouse
+    this.mouse.listenDeviceEvent()
   }
 
   private onMouseDisconnected() {

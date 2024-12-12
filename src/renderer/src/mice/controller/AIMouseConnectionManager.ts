@@ -1,6 +1,6 @@
-import { AIMouse } from '../device/AIMouse'
-import { AIMouseConnector } from './AIMouseConnector'
-import { MicLinkAIMouseHIDConnector } from './mic-link/MicLinkAIMouseHIDConnector'
+import { AIMouse } from '../base/device/AIMouse'
+import { AIMouseConnector } from '../base/connection/AIMouseConnector'
+import { MicLinkAIMouseHIDConnector } from '../mic-link/MicLinkAIMouseHIDConnector'
 
 export class AIMouseConnectionManager {
   private onDeviceConnected: (mouse: AIMouse) => void = () => {}

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AIMouseController } from './ai-mouse-stack/controller/AIMouseController'
+import { AIMouseController } from '../../mice/controller/AIMouseController'
 
 const testDebut = () => {
   console.log(window.mainProcTypes.TestEnum.Test1)
@@ -10,14 +10,19 @@ const printMouse = () => {
   console.log(AIMouseController.shared().currentMouse())
 }
 
+const getMouseInfo = () => {
+  AIMouseController.shared().sendDataToDevice(new Uint8Array([0x61]))
+}
+
 AIMouseController.shared().startConnect()
 </script>
 
 <template>
-  <div>test div</div>
   <button @click="testDebut">test print Main ipc enum</button>
   <div />
   <button @click="printMouse">print mouse info</button>
+  <div />
+  <button @click="getMouseInfo">send 0x61 to mouse (get mouse info)</button>
 </template>
 
 <style scoped></style>
