@@ -30,11 +30,11 @@ export abstract class AIMouse {
   abstract deviceInfo: AIMouseDeviceInfo
   abstract buttons: AIMouseButton[]
 
+  onAIMouseEvent: (event: AIMouseEvent) => void = () => {}
+
   abstract listenDeviceEvent(): void
 
   abstract sendData(data: Uint8Array): void
-
-  abstract onAIMouseEvent(event: AIMouseEvent): void
 
   receiveData(data: DataView) {
     const event = this.dataParser.parseAIMouseData(data)
@@ -43,7 +43,13 @@ export abstract class AIMouse {
 }
 
 export abstract class AIHIDMouse extends AIMouse {
-  hidDevice?: HIDDevice
+  hidDevice: HIDDevice
+  connectionType: AIMouseConnectionType = AIMouseConnectionType.HID
+
+  constructor(hidDevice: HIDDevice) {
+    super()
+    this.hidDevice = hidDevice
+  }
 
   listenDeviceEvent() {
     this.hidDevice?.addEventListener('inputreport', (event) => {
@@ -57,5 +63,14 @@ export abstract class AIHIDMouse extends AIMouse {
 }
 
 export abstract class AIBluetoothMouse extends AIMouse {
-  bluetoothDevice?: BluetoothDevice
+  bluetoothDevice: BluetoothDevice
+
+  constructor(bluetoothDevice: BluetoothDevice) {
+    super()
+    this.bluetoothDevice = bluetoothDevice
+  }
+
+  listenDeviceEvent(): void {
+    // todo
+  }
 }

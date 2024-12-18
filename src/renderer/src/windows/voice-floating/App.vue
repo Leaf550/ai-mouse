@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { AIMouseController } from '../../mice/controller/AIMouseController'
+import { MicLinkAIMouseHIDConnector } from '@renderer/mice/mic-link/MicLinkAIMouseHIDConnector'
+import { AIMouseController } from '../../mice/base/controller/AIMouseController'
 
 const testDebut = () => {
   console.log(window.mainProcTypes.TestEnum.Test1)
@@ -14,6 +15,7 @@ const getMouseInfo = () => {
   AIMouseController.shared().sendDataToDevice(new Uint8Array([0x61]))
 }
 
+AIMouseController.shared().addConnectors(new MicLinkAIMouseHIDConnector())
 AIMouseController.shared().startConnect()
 </script>
 

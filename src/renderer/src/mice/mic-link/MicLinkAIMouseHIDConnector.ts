@@ -8,11 +8,13 @@ export class MicLinkAIMouseHIDConnector extends AIMouseHIDConnector {
 
   isHIDAIMouse(device: HIDDevice): boolean {
     const micLinkDeviceInfo = new MicLinkDeviceInfo()
-    if (device.vendorId === micLinkDeviceInfo.vendorID && device.productId === micLinkDeviceInfo.productID) {
-      for (const collectInfo of device.collections) {
-        if (collectInfo.usage === micLinkDeviceInfo.usage && collectInfo.usagePage === micLinkDeviceInfo.usagePage) {
-          return true
-        }
+    if (device.vendorId !== micLinkDeviceInfo.vendorID || device.productId !== micLinkDeviceInfo.productID) {
+      return false
+    }
+
+    for (const collectInfo of device.collections) {
+      if (collectInfo.usage === micLinkDeviceInfo.usage && collectInfo.usagePage === micLinkDeviceInfo.usagePage) {
+        return true
       }
     }
 

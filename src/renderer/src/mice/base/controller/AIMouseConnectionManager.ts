@@ -1,12 +1,11 @@
-import { AIMouse } from '../base/device/AIMouse'
-import { AIMouseConnector } from '../base/connection/AIMouseConnector'
-import { MicLinkAIMouseHIDConnector } from '../mic-link/MicLinkAIMouseHIDConnector'
+import { AIMouse } from '../device/AIMouse'
+import { AIMouseConnector } from '../connection/AIMouseConnector'
 
 export class AIMouseConnectionManager {
   private onDeviceConnected: (mouse: AIMouse) => void = () => {}
   private onDeviceDisconnected: () => void = () => {}
 
-  private connectors: AIMouseConnector[] = [new MicLinkAIMouseHIDConnector()]
+  private connectors: AIMouseConnector[] = []
 
   private static instance: AIMouseConnectionManager
 
@@ -15,6 +14,10 @@ export class AIMouseConnectionManager {
       this.instance = new AIMouseConnectionManager()
     }
     return this.instance
+  }
+
+  public addConnectors(...connectors: AIMouseConnector[]) {
+    this.connectors.push(...connectors)
   }
 
   public startConnect() {

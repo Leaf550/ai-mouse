@@ -1,5 +1,7 @@
 import { AIMouseConnectionManager } from './AIMouseConnectionManager'
-import { AIMouse } from '../base/device/AIMouse'
+import { AIMouse } from '../device/AIMouse'
+import { AIMouseConnector } from '../connection/AIMouseConnector'
+import { AIMouseEvent } from '../data-parser/AIMouseDataParser'
 
 export class AIMouseController {
   private static instance: AIMouseController
@@ -27,6 +29,10 @@ export class AIMouseController {
     return this.mouse
   }
 
+  public addConnectors(...connectors: AIMouseConnector[]) {
+    this.connectionManager.addConnectors(...connectors)
+  }
+
   public startConnect() {
     this.connectionManager.setConnectionEventCallbacks(
       (mouse: AIMouse) => {
@@ -46,6 +52,9 @@ export class AIMouseController {
   private onMouseConnected(mouse: AIMouse) {
     this.mouse = mouse
     this.mouse.listenDeviceEvent()
+    this.mouse.onAIMouseEvent = (event: AIMouseEvent) => {
+      console.log(event)
+    }
   }
 
   private onMouseDisconnected() {
