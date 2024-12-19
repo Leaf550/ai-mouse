@@ -1,26 +1,42 @@
 import { AIMouseButtonAction, AIMouseButtonName } from '../device/AIMouseButton'
 
+export interface AIMouseDataParser {
+  parseAIMouseData(data: DataView): AIMouseEvent
+}
+
 export enum AIMouseEventType {
   ButtonEvent,
-  VoiceEvent
+  DataEvent
 }
 
 export abstract class AIMouseEvent {
   abstract eventType: AIMouseEventType
+  abstract data?: number[]
+  abstract buttonName?: AIMouseButtonName
+  abstract buttonAction?: AIMouseButtonAction
 }
 
 export class AIMouseButtonEvent extends AIMouseEvent {
   public eventType: AIMouseEventType = AIMouseEventType.ButtonEvent
-  public button: AIMouseButtonName
-  public action: AIMouseButtonAction
+  public data?: number[] = undefined
+  public buttonName: AIMouseButtonName
+  public buttonAction: AIMouseButtonAction
 
-  constructor(button: AIMouseButtonName, action: AIMouseButtonAction) {
+  constructor(button: AIMouseButtonName, buttonAction: AIMouseButtonAction) {
     super()
-    this.button = button
-    this.action = action
+    this.buttonName = button
+    this.buttonAction = buttonAction
   }
 }
 
-export interface AIMouseDataParser {
-  parseAIMouseData(data: DataView): AIMouseEvent
+export class AIMouseDataEvent extends AIMouseEvent {
+  public eventType: AIMouseEventType = AIMouseEventType.DataEvent
+  public data: number[]
+  public buttonName?: AIMouseButtonName = undefined
+  public buttonAction?: AIMouseButtonAction = undefined
+
+  constructor(data: number[]) {
+    super()
+    this.data = data
+  }
 }

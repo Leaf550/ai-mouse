@@ -1,7 +1,6 @@
 import { AIMouseConnectionManager } from './AIMouseConnectionManager'
-import { AIMouse } from '../device/AIMouse'
+import { AIMouse, AIMouseDataEventListener } from '../device/AIMouse'
 import { AIMouseConnector } from '../connection/AIMouseConnector'
-import { AIMouseEvent } from '../data-parser/AIMouseDataParser'
 
 export class AIMouseController {
   private static instance: AIMouseController
@@ -14,6 +13,7 @@ export class AIMouseController {
   }
 
   private connectionManager = AIMouseConnectionManager.shared()
+  private mouseDataEventListeners: AIMouseDataEventListener[] = []
 
   private _mouse?: AIMouse
 
@@ -23,6 +23,9 @@ export class AIMouseController {
 
   private set mouse(mouse: AIMouse | undefined) {
     this._mouse = mouse
+    if (this._mouse !== undefined) {
+      this._mouse.dataEventListeners = this.mouseDataEventListeners
+    }
   }
 
   public currentMouse() {
@@ -49,12 +52,16 @@ export class AIMouseController {
     this.mouse?.sendData(data)
   }
 
+  public addAIMouseDataEventListeners(...listeners: AIMouseDataEventListener[]) {
+    this.mouseDataEventListeners.push(...listeners)
+    if (this.mouse !== undefined) {
+      this.mouse.dataEventListeners.push(...listeners)
+    }
+  }
+
   private onMouseConnected(mouse: AIMouse) {
     this.mouse = mouse
     this.mouse.listenDeviceEvent()
-    this.mouse.onAIMouseEvent = (event: AIMouseEvent) => {
-      console.log(event)
-    }
   }
 
   private onMouseDisconnected() {

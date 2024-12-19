@@ -1,11 +1,6 @@
-import { AIMouseDataParser, AIMouseEvent } from '../data-parser/AIMouseDataParser'
-import { AIMouseButton } from './AIMouseButton'
+import { AIMouseDataParser, AIMouseEvent, AIMouseEventType } from '../data-parser/AIMouseDataParser'
+import { AIMouseButton, AIMouseButtonAction, AIMouseButtonStatus } from './AIMouseButton'
 import { AIMouseDeviceInfo } from './DeviceInfo'
-
-export enum AIMouseDataTransferStatus {
-  Success,
-  Failed
-}
 
 export enum AIMouseConnectionType {
   USB,
@@ -13,13 +8,11 @@ export enum AIMouseConnectionType {
   Bluetooth
 }
 
-export class AIMouseDataTransferInResult {
-  status: AIMouseDataTransferStatus
-  data: DataView
+export class AIMouseDataEventListener {
+  handleDataEvent: (event: AIMouseEvent) => void
 
-  constructor(status: AIMouseDataTransferStatus, data: DataView) {
-    this.status = status
-    this.data = data
+  constructor(handleDataEvent: (event: AIMouseEvent) => void) {
+    this.handleDataEvent = handleDataEvent
   }
 }
 
@@ -30,15 +23,34 @@ export abstract class AIMouse {
   abstract deviceInfo: AIMouseDeviceInfo
   abstract buttons: AIMouseButton[]
 
-  onAIMouseEvent: (event: AIMouseEvent) => void = () => {}
-
   abstract listenDeviceEvent(): void
-
   abstract sendData(data: Uint8Array): void
 
-  receiveData(data: DataView) {
+  dataEventListeners: AIMouseDataEventListener[] = []
+
+  parseRawData(data: DataView) {
     const event = this.dataParser.parseAIMouseData(data)
-    this.onAIMouseEvent(event)
+
+    switch (event.eventType) {
+      case AIMouseEventType.ButtonEvent:
+        for (const button of this.buttons) {
+          if (button.name === event.buttonName && event.buttonAction !== undefined) {
+            if (event.buttonAction === AIMouseButtonAction.Down) {
+              button.status = AIMouseButtonStatus.Down
+            }
+            if (event.buttonAction === AIMouseButtonAction.Up) {
+              button.status = AIMouseButtonStatus.Up
+            }
+            button.onButtonEvent(button, event.buttonAction)
+          }
+        }
+        break
+      case AIMouseEventType.DataEvent:
+        for (const dataEventListener of this.dataEventListeners) {
+          dataEventListener.handleDataEvent(event)
+        }
+        break
+    }
   }
 }
 
@@ -53,7 +65,7 @@ export abstract class AIHIDMouse extends AIMouse {
 
   listenDeviceEvent() {
     this.hidDevice?.addEventListener('inputreport', (event) => {
-      this.receiveData(event.data)
+      this.parseRawData(event.data)
     })
   }
 

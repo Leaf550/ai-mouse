@@ -6,20 +6,27 @@ export enum AIMouseButtonName {
 }
 
 export enum AIMouseButtonStatus {
-  Up,
-  Down
+  Up = 'Up',
+  Down = 'Down'
 }
 
 export enum AIMouseButtonAction {
-  Click,
-  DoubleClick
+  Click = 'Click',
+  DoubleClick = 'DoubleClick',
+  Up = 'Up',
+  Down = 'Down'
 }
 
 export class AIMouseButton {
   name: AIMouseButtonName
   status: AIMouseButtonStatus = AIMouseButtonStatus.Up
+  onButtonEvent: (button: AIMouseButton, action: AIMouseButtonAction) => void
 
-  constructor(name: AIMouseButtonName) {
+  constructor(
+    name: AIMouseButtonName,
+    onButtonEvent: (button: AIMouseButton, action: AIMouseButtonAction) => void = () => {}
+  ) {
     this.name = name
+    this.onButtonEvent = onButtonEvent
   }
 }

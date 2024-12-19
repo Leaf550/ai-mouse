@@ -10,8 +10,14 @@ export class MicLinkHIDAIMouse extends AIHIDMouse {
 
   deviceInfo: AIMouseDeviceInfo = new MicLinkDeviceInfo()
   buttons: AIMouseButton[] = [
-    new AIMouseButton(AIMouseButtonName.AI),
-    new AIMouseButton(AIMouseButtonName.Voice),
-    new AIMouseButton(AIMouseButtonName.Translation)
+    new AIMouseButton(AIMouseButtonName.AI, (button, action) => {
+      console.log(button.name, action, 'status:', button.status)
+    }),
+    new AIMouseButton(AIMouseButtonName.Voice, (button, action) => {
+      console.log(button.name, action, 'status:', button.status)
+    }),
+    new AIMouseButton(AIMouseButtonName.Translation, (button, action) => {
+      console.log(button.name, action, 'status:', button.status)
+    })
   ]
 }
