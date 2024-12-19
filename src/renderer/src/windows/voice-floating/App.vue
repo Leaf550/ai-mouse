@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { MicLinkAIMouseHIDConnector } from '@renderer/mice/mic-link/MicLinkAIMouseHIDConnector'
+import { MicLinkAIMouseHIDConnector } from '@renderer/mice/concrete-mise/mic-link/MicLinkAIMouseHIDConnector'
 import { AIMouseController } from '../../mice/base/controller/AIMouseController'
 import { AIMouseDataEventListener } from '@renderer/mice/base/device/AIMouse'
-import { YUNMouseAIMouseHIDConnector } from '@renderer/mice/yun-mouse/YUNMouseAIMouseHIDConnector'
+import { YUNMouseAIMouseHIDConnector } from '@renderer/mice/concrete-mise/yun-mouse/YUNMouseAIMouseHIDConnector'
 
 const testDebut = () => {
   console.log(window.mainProcTypes.TestEnum.Test1)

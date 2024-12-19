@@ -1,7 +1,7 @@
-import { AIMouseFactory } from '../base/device/AIMouseFactory'
+import { AIMouseFactory } from '../../base/device/AIMouseFactory'
 import { MicLinkAIMouseFactory } from './MicLinkAIMouseFactory'
 import { MicLinkDeviceInfo } from './MicLinkDeviceInfo'
-import { AIMouseHIDConnector } from '../base/connection/AIMouseHIDConnector'
+import { AIMouseHIDConnector } from '../../base/connection/AIMouseHIDConnector'
 
 export class MicLinkAIMouseHIDConnector extends AIMouseHIDConnector {
   aiMouseFactory: AIMouseFactory = new MicLinkAIMouseFactory()

@@ -1,10 +1,10 @@
-import { AIMouseButtonAction, AIMouseButtonName } from '../base/device/AIMouseButton'
+import { AIMouseButtonAction, AIMouseButtonName } from '../../base/device/AIMouseButton'
 import {
   AIMouseButtonEvent,
   AIMouseDataEvent,
   AIMouseDataParser,
   AIMouseEvent
-} from '../base/data-parser/AIMouseDataParser'
+} from '../../base/data-parser/AIMouseDataParser'
 
 export class MicLinkAIMouseDataParser implements AIMouseDataParser {
   public parseAIMouseData(data: DataView): AIMouseEvent {

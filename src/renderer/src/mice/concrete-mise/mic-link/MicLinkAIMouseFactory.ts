@@ -1,5 +1,5 @@
-import { AIBluetoothMouse, AIHIDMouse } from '../base/device/AIMouse'
-import { AIMouseFactory } from '../base/device/AIMouseFactory'
+import { AIBluetoothMouse, AIHIDMouse } from '../../base/device/AIMouse'
+import { AIMouseFactory } from '../../base/device/AIMouseFactory'
 import { MicLinkHIDAIMouse } from './MicLinkHIDAIMouse'
 
 export class MicLinkAIMouseFactory extends AIMouseFactory {

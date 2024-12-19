@@ -3,8 +3,8 @@ import {
   AIMouseDataEvent,
   AIMouseDataParser,
   AIMouseEvent
-} from '../base/data-parser/AIMouseDataParser'
-import { AIMouseButtonAction, AIMouseButtonName } from '../base/device/AIMouseButton'
+} from '../../base/data-parser/AIMouseDataParser'
+import { AIMouseButtonAction, AIMouseButtonName } from '../../base/device/AIMouseButton'
 
 export class YUNMouseAIMouseDataParser implements AIMouseDataParser {
   parseAIMouseData(data: DataView): AIMouseEvent {

@@ -1,8 +1,8 @@
-import { AIMouseDataParser } from '../base/data-parser/AIMouseDataParser'
+import { AIMouseDataParser } from '../../base/data-parser/AIMouseDataParser'
 import { MicLinkAIMouseDataParser } from './MicLinkAIMouseDataParser'
-import { AIHIDMouse } from '../base/device/AIMouse'
-import { AIMouseButton, AIMouseButtonName } from '../base/device/AIMouseButton'
-import { AIMouseDeviceInfo } from '../base/device/DeviceInfo'
+import { AIHIDMouse } from '../../base/device/AIMouse'
+import { AIMouseButton, AIMouseButtonName } from '../../base/device/AIMouseButton'
+import { AIMouseDeviceInfo } from '../../base/device/DeviceInfo'
 import { MicLinkDeviceInfo } from './MicLinkDeviceInfo'
 
 export class MicLinkHIDAIMouse extends AIHIDMouse {

@@ -1,7 +1,7 @@
-import { AIMouseDataParser } from '../base/data-parser/AIMouseDataParser'
-import { AIHIDMouse } from '../base/device/AIMouse'
-import { AIMouseButton, AIMouseButtonName } from '../base/device/AIMouseButton'
-import { AIMouseDeviceInfo } from '../base/device/DeviceInfo'
+import { AIMouseDataParser } from '../../base/data-parser/AIMouseDataParser'
+import { AIHIDMouse } from '../../base/device/AIMouse'
+import { AIMouseButton, AIMouseButtonName } from '../../base/device/AIMouseButton'
+import { AIMouseDeviceInfo } from '../../base/device/DeviceInfo'
 import { YUNMouseAIMouseDataParser } from './YUNMouseAIMouseDataParser'
 import { YUNMouseDeviceInfo } from './YUNMouseDeviceInfo'
 

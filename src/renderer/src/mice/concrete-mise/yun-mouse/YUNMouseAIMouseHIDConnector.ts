@@ -1,5 +1,5 @@
-import { AIMouseHIDConnector } from '../base/connection/AIMouseHIDConnector'
-import { AIMouseFactory } from '../base/device/AIMouseFactory'
+import { AIMouseHIDConnector } from '../../base/connection/AIMouseHIDConnector'
+import { AIMouseFactory } from '../../base/device/AIMouseFactory'
 import { YUNMouseAIMouseFactory } from './YUNMouseAIMouseFactory'
 import { YUNMouseDeviceInfo } from './YUNMouseDeviceInfo'
 

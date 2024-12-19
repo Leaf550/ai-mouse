@@ -3,15 +3,15 @@ import {
   AIMouseLEDStatus,
   AIMouseMicrophoneBitRate,
   AIMouseMicrophoneStatus
-} from '../base/device/DeviceInfo'
+} from '../../base/device/DeviceInfo'
 
-export class YUNMouseDeviceInfo implements AIMouseDeviceInfo {
-  deviceName: string = '永佳盛YUN Mouse'
-  vendorName: string = '永佳盛'
-  vendorID: number = 0xabc9
-  productID: number = 0xca89
+export class MicLinkDeviceInfo implements AIMouseDeviceInfo {
+  deviceName: string = '麦链M71'
+  vendorName: string = '麦链'
+  vendorID: number = 0x248a
+  productID: number = 0x60ab
   usage: number = 0
-  usagePage: number = 65283
+  usagePage: number = 0xff91
   snCode: string = ''
   microphoneStatus: AIMouseMicrophoneStatus = AIMouseMicrophoneStatus.Closed
   ledStatus: AIMouseLEDStatus = AIMouseLEDStatus.Closed
