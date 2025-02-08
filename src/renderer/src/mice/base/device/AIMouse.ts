@@ -52,6 +52,10 @@ export abstract class AIMouse {
         break
     }
   }
+
+  dispose() {
+    this.dataEventListeners = []
+  }
 }
 
 export abstract class AIHIDMouse extends AIMouse {
@@ -63,14 +67,21 @@ export abstract class AIHIDMouse extends AIMouse {
     this.hidDevice = hidDevice
   }
 
+  private inputreportListener = (event: HIDInputReportEvent) => {
+    this.parseRawData(event.data)
+  }
+
   listenDeviceEvent() {
-    this.hidDevice?.addEventListener('inputreport', (event) => {
-      this.parseRawData(event.data)
-    })
+    this.hidDevice?.addEventListener('inputreport', this.inputreportListener)
   }
 
   sendData(data: Uint8Array): void {
     this.hidDevice?.sendReport(0, data)
+  }
+
+  override dispose(): void {
+    super.dispose()
+    this.hidDevice?.removeEventListener('inputreport', this.inputreportListener)
   }
 }
 

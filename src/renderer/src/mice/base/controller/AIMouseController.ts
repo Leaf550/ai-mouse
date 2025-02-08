@@ -60,11 +60,13 @@ export class AIMouseController {
   }
 
   private onMouseConnected(mouse: AIMouse) {
+    this.mouse?.dispose()
     this.mouse = mouse
     this.mouse.listenDeviceEvent()
   }
 
   private onMouseDisconnected() {
+    this.mouse?.dispose()
     this.mouse = undefined
   }
 }
