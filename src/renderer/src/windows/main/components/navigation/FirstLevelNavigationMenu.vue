@@ -1,0 +1,34 @@
+<script setup lang="ts">
+import FirstLevelNavigationItem from './FirstLevelNavigationItem.vue'
+import { useNavigationStore } from '../../stores/NavigationStore'
+
+const navigationStore = useNavigationStore()
+
+const onItemClick = (index: number) => {
+  navigationStore.selectFirstIndex(index)
+}
+</script>
+
+<template>
+  <div class="firstLevelNavigationBar">
+    <div v-for="(item, index) in navigationStore.navigationConfigs" :key="item.title">
+      <FirstLevelNavigationItem :item-config="item" @click="onItemClick(index)" />
+    </div>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+.firstLevelNavigationBar {
+  -webkit-app-region: drag;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  padding-top: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgb(47, 60, 70);
+}
+</style>

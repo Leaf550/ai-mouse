@@ -1,47 +1,58 @@
 <script setup lang="ts">
-import Versions from '@renderer/components/Versions.vue'
+import NavigationView from './components/navigation/NavigationView.vue'
+import { useNavigationStore } from './stores/NavigationStore'
 
-const ipcHandle = () => {
-  interface TestRes {
-    total?: number
-  }
-
-  window.netAPIs
-    .get<TestRes>('/')
-    .then((res) => {
-      console.log(res)
-      console.log(res.data.total ?? 0)
-    })
-    .catch((err) => {
-      console.error(err)
-    })
-    .finally(() => {
-      console.log('test get finish')
-    })
-
-  window.userAPIs.getUser().then((user) => {
-    console.log(user)
-  })
-}
+const navigationStore = useNavigationStore()
 </script>
 
 <template>
-  <img alt="logo" class="logo" src="@renderer/assets/electron.svg" />
-  <div class="creator">Powered by electron-vite</div>
-  <div class="text">
-    Build an Electron app with
-    <span class="vue">Vue</span>
-    and
-    <span class="ts">TypeScript</span>
+  <div class="navigationArea">
+    <NavigationView />
   </div>
-  <p class="tip">Please try pressing <code>F12</code> to open the devTool</p>
-  <div class="actions">
-    <div class="action">
-      <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">Documentation</a>
-    </div>
-    <div class="action">
-      <a target="_blank" rel="noreferrer" @click="ipcHandle">Test netAPIs</a>
-    </div>
+  <div class="appTitleBarArea"></div>
+  <div class="appContentArea">
+    {{
+      `${navigationStore.currentSelectedFirstLevelItem?.title ?? '1'} - ${navigationStore.currentSelectedSecondLevelItem?.title ?? '2'}`
+    }}
   </div>
-  <Versions />
 </template>
+
+<style lang="scss">
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+</style>
+
+<style lang="scss" scoped>
+.navigationArea {
+  width: 270px;
+  height: 100%;
+  box-shadow: 2px 0 5px rgb(220, 220, 220);
+}
+
+.appTitleBarArea {
+  -webkit-app-region: drag;
+  position: absolute;
+  top: 0;
+  left: 270px;
+  right: 0;
+  height: 50px;
+  border-width: 0 0 1px 0;
+  border-style: solid;
+  border-color: rgb(220, 220, 220);
+  // background-color: yellow;
+}
+
+.appContentArea {
+  position: absolute;
+  top: 50px;
+  left: 270px;
+  right: 0;
+  bottom: 0;
+  padding: 8px;
+}
+</style>
