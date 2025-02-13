@@ -1,19 +1,21 @@
 <script setup lang="ts">
 import { useNavigationStore } from '../../stores/NavigationStore'
+import { useRouter } from 'vue-router'
 
 const navigationStore = useNavigationStore()
+const router = useRouter()
 
 const onSecondNavigationItemSelected = (index: number) => {
-  navigationStore.selectSecondIndex(navigationStore.firstLevelSelected, index)
+  navigationStore.selectSecondLevelTabAt(navigationStore.firstLevelTabSelectedIndex, index, router)
 }
 </script>
 
 <template>
   <div class="secondLevelNavigationMenuContainer">
-    <div class="firstLevelTitleBar">{{ navigationStore.currentSelectedFirstLevelItem?.title }}</div>
+    <div class="firstLevelTitleBar">{{ navigationStore.currentSelectedFirstLevelTabItem?.title }}</div>
     <div class="secondLevelNavigationList">
       <div
-        v-for="(config, index) in navigationStore.curreentSecondNavigationList"
+        v-for="(config, index) in navigationStore.currentSecondTabsList"
         :key="config.title"
         class="secondLevelNavigationItem"
         :class="{ secondLevelNavigationItemSelected: config.isSelected }"

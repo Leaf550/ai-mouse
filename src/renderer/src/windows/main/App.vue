@@ -1,8 +1,20 @@
 <script setup lang="ts">
-import NavigationView from './components/navigation/NavigationView.vue'
+// import { onMounted } from 'vue'
 import { useNavigationStore } from './stores/NavigationStore'
+import { useRouter } from 'vue-router'
+import NavigationView from './components/navigation/NavigationView.vue'
+
+// onMounted(() => {
+const router = useRouter()
 
 const navigationStore = useNavigationStore()
+const currentNavigationStackTopItem = navigationStore.currentNavigationStackTopItem
+
+router.push({
+  path: currentNavigationStackTopItem?.path ?? '/',
+  query: currentNavigationStackTopItem?.query
+})
+// })
 </script>
 
 <template>
@@ -11,9 +23,7 @@ const navigationStore = useNavigationStore()
   </div>
   <div class="appTitleBarArea"></div>
   <div class="appContentArea">
-    {{
-      `${navigationStore.currentSelectedFirstLevelItem?.title ?? '1'} - ${navigationStore.currentSelectedSecondLevelItem?.title ?? '2'}`
-    }}
+    <RouterView :key="$route.fullPath" />
   </div>
 </template>
 
@@ -54,5 +64,6 @@ body,
   right: 0;
   bottom: 0;
   padding: 8px;
+  overflow-y: auto;
 }
 </style>

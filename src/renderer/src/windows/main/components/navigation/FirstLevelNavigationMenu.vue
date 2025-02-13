@@ -1,17 +1,19 @@
 <script setup lang="ts">
 import FirstLevelNavigationItem from './FirstLevelNavigationItem.vue'
 import { useNavigationStore } from '../../stores/NavigationStore'
+import { useRouter } from 'vue-router'
 
 const navigationStore = useNavigationStore()
+const router = useRouter()
 
 const onItemClick = (index: number) => {
-  navigationStore.selectFirstIndex(index)
+  navigationStore.selectFirstLevelTabAt(index, router)
 }
 </script>
 
 <template>
   <div class="firstLevelNavigationBar">
-    <div v-for="(item, index) in navigationStore.navigationConfigs" :key="item.title">
+    <div v-for="(item, index) in navigationStore.tabConfigs" :key="item.title">
       <FirstLevelNavigationItem :item-config="item" @click="onItemClick(index)" />
     </div>
   </div>

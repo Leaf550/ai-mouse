@@ -1,14 +1,30 @@
-import { defineStore } from 'pinia'
+import { defineStore, StoreGeneric } from 'pinia'
 import { ref, computed } from 'vue'
+import { Router, LocationQueryRaw } from 'vue-router'
 
-export interface NavigationItemConfig {
-  isSelected: boolean
-  readonly title: string
-  readonly iconName: string
-  readonly nextLevelItems?: NavigationItemConfig[]
+export interface NavigationStackItem {
+  path: string
+  navigationItemID: string
+  query?: LocationQueryRaw
+  store?: StoreGeneric
 }
 
-const initialNavigationConfigs: NavigationItemConfig[] = [
+export interface TabItemConfig {
+  isSelected: boolean
+  readonly title: string
+  readonly routerPath?: string
+}
+
+export interface FirstLevelTabItemConfig extends TabItemConfig {
+  readonly iconName: string
+  readonly nextLevelItems?: SecondLevelTabItemConfig[]
+}
+
+export interface SecondLevelTabItemConfig extends TabItemConfig {
+  navigationStack: NavigationStackItem[]
+}
+
+const initialTabConfigs: FirstLevelTabItemConfig[] = [
   {
     isSelected: true,
     title: 'AI智能体',
@@ -17,22 +33,27 @@ const initialNavigationConfigs: NavigationItemConfig[] = [
       {
         isSelected: true,
         title: '智能问答',
-        iconName: ''
+        routerPath: '/ai/ask'
       },
       {
         isSelected: false,
         title: '智能写作',
-        iconName: ''
+        routerPath: '/ai/write'
       },
       {
         isSelected: false,
         title: '智能绘图',
-        iconName: ''
+        routerPath: '/ai/paint'
       },
       {
         isSelected: false,
         title: '智能PPT',
-        iconName: ''
+        routerPath: '/ai/slide_show'
+      },
+      {
+        isSelected: false,
+        title: '错误页面',
+        routerPath: '/not-found'
       }
     ]
   },
@@ -44,79 +65,191 @@ const initialNavigationConfigs: NavigationItemConfig[] = [
       {
         isSelected: true,
         title: '鼠标设置',
-        iconName: ''
+        // routerPath: '/settings/mouse'
+        routerPath: '/ai/ask'
       },
       {
         isSelected: false,
         title: '界面设置',
-        iconName: ''
+        // routerPath: '/settings/interface'
+        routerPath: '/not-found'
+      }
+    ]
+  },
+  {
+    isSelected: false,
+    title: 'Debug',
+    iconName: 'ChromeFilled',
+    nextLevelItems: [
+      {
+        isSelected: true,
+        title: '导航测试',
+        routerPath: '/debug/navigation_test'
+      },
+      {
+        isSelected: false,
+        title: '导航测试2',
+        routerPath: '/debug/navigation_test'
       }
     ]
   }
-]
+].map((firstLevelItem, firstLevelItemIndex) => {
+  firstLevelItem.nextLevelItems = firstLevelItem.nextLevelItems.map((secondLevelItem, secondLevelItemIndex) => {
+    const navigationStack: NavigationStackItem[] = [
+      {
+        path: secondLevelItem.routerPath,
+        navigationItemID: `${firstLevelItemIndex}` + '-' + `${secondLevelItemIndex}`
+      }
+    ]
+    const res = {
+      ...secondLevelItem,
+      navigationStack
+    }
+
+    return res
+  })
+  return firstLevelItem as FirstLevelTabItemConfig
+})
 
 export const useNavigationStore = defineStore('NavigationStore', () => {
-  const navigationConfigs = ref(initialNavigationConfigs)
+  const tabConfigs = ref(initialTabConfigs)
 
-  const firstLevelSelected = computed(() => initialNavigationConfigs.findIndex((item) => item.isSelected))
+  const firstLevelTabSelectedIndex = computed(() => initialTabConfigs.findIndex((item) => item.isSelected))
 
-  const secondLevelSelected = computed(() => {
-    return initialNavigationConfigs.map((firstLevelConfig) => {
+  const secondLevelTabSelectedIndex = computed(() => {
+    return initialTabConfigs.map((firstLevelConfig) => {
       return (firstLevelConfig.nextLevelItems ?? []).findIndex((item) => item.isSelected)
     })
   })
 
-  const currentSelectedFirstLevelItem = computed(() => navigationConfigs.value.find((config) => config.isSelected))
+  const currentSelectedFirstLevelTabItem = computed(() => tabConfigs.value.find((config) => config.isSelected))
 
-  const curreentSecondNavigationList = computed(
-    () => navigationConfigs.value.find((first) => first.isSelected)?.nextLevelItems
+  const currentSecondTabsList = computed(() => tabConfigs.value.find((first) => first.isSelected)?.nextLevelItems)
+
+  const currentSelectedSecondLevelTabItem = computed(() =>
+    currentSecondTabsList.value?.find((config) => config.isSelected)
   )
 
-  const currentSelectedSecondLevelItem = computed(() =>
-    curreentSecondNavigationList.value?.find((config) => config.isSelected)
-  )
+  const currentNavigationStack = computed(() => currentSelectedSecondLevelTabItem.value?.navigationStack)
 
-  const selectFirstIndex = (index: number) => {
-    if (navigationConfigs.value.length <= index) {
+  const currentNavigationStackTopItem = computed(() => {
+    const currentStack = currentNavigationStack.value
+    if (!currentStack) {
+      return undefined
+    }
+    if (currentStack.length === 0) {
+      return undefined
+    }
+
+    return currentStack[currentStack.length - 1]
+  })
+
+  const selectFirstLevelTabAt = (index: number, router?: Router) => {
+    if (tabConfigs.value.length <= index) {
       return
     }
-    navigationConfigs.value.forEach((config) => {
+    tabConfigs.value.forEach((config) => {
       if (config.isSelected) {
         config.isSelected = false
       }
     })
-    navigationConfigs.value[index].isSelected = true
+    tabConfigs.value[index].isSelected = true
+
+    switchTab(router)
   }
 
-  const selectSecondIndex = (firstIndex: number, secondIndex: number) => {
-    if (navigationConfigs.value.length <= firstIndex) {
+  const selectSecondLevelTabAt = (firstIndex: number, secondIndex: number, router?: Router) => {
+    if (tabConfigs.value.length <= firstIndex) {
       return
     }
 
-    console.log(navigationConfigs.value[firstIndex].nextLevelItems?.length ?? 0)
-
-    if ((navigationConfigs.value[firstIndex].nextLevelItems?.length ?? 0) <= secondIndex) {
+    if ((tabConfigs.value[firstIndex].nextLevelItems?.length ?? 0) <= secondIndex) {
       return
     }
 
-    ;(navigationConfigs.value[firstIndex].nextLevelItems ?? []).forEach((config) => {
+    ;(tabConfigs.value[firstIndex].nextLevelItems ?? []).forEach((config) => {
       if (config.isSelected) {
         config.isSelected = false
       }
     })
-    ;(navigationConfigs.value[firstIndex].nextLevelItems ?? [])[secondIndex].isSelected = true
+    ;(tabConfigs.value[firstIndex].nextLevelItems ?? [])[secondIndex].isSelected = true
 
-    console.log(navigationConfigs.value)
+    switchTab(router)
+  }
+
+  const switchTab = (router?: Router) => {
+    const currentNavigationItem = currentNavigationStackTopItem.value
+    if (!currentNavigationItem) {
+      return
+    }
+    router?.replace({
+      path: currentNavigationItem.path,
+      query: {
+        queriesJSONString: JSON.stringify({
+          ...currentNavigationItem.query
+        }),
+        navigationItemID: currentNavigationItem.navigationItemID
+      }
+    })
+  }
+
+  const pushToNavigationStack = (path: string, query?: LocationQueryRaw) => {
+    const navigationItem = {
+      path,
+      query: query,
+      navigationItemID: (currentNavigationStackTopItem.value?.navigationItemID ?? '') + path
+    }
+    currentNavigationStack.value?.push(navigationItem)
+  }
+
+  const pushToPath = (router: Router, path: string, query?: LocationQueryRaw) => {
+    pushToNavigationStack(path, query)
+    if (!currentNavigationStackTopItem.value) {
+      return
+    }
+    router.replace({
+      path: currentNavigationStackTopItem.value.path,
+      query: {
+        queriesJSONString: JSON.stringify({
+          ...currentNavigationStackTopItem.value.query
+        }),
+        navigationItemID: currentNavigationStackTopItem.value.navigationItemID
+      }
+    })
+  }
+
+  const back = (router: Router) => {
+    if (currentNavigationStack.value?.length === 1) {
+      console.log('this is root page')
+      return
+    }
+    currentNavigationStack.value?.pop()
+    if (!currentNavigationStackTopItem.value) {
+      return
+    }
+    router.replace({
+      path: currentNavigationStackTopItem.value.path,
+      query: {
+        queriesJSONString: JSON.stringify({
+          ...currentNavigationStackTopItem.value.query
+        }),
+        navigationItemID: currentNavigationStackTopItem.value.navigationItemID
+      }
+    })
   }
 
   return {
-    navigationConfigs,
-    firstLevelSelected,
-    secondLevelSelected,
-    selectFirstIndex,
-    selectSecondIndex,
-    currentSelectedFirstLevelItem,
-    curreentSecondNavigationList,
-    currentSelectedSecondLevelItem
+    tabConfigs,
+    firstLevelTabSelectedIndex,
+    secondLevelTabSelectedIndex,
+    currentNavigationStack,
+    currentNavigationStackTopItem,
+    selectFirstLevelTabAt,
+    selectSecondLevelTabAt,
+    currentSelectedFirstLevelTabItem,
+    currentSecondTabsList,
+    currentSelectedSecondLevelTabItem,
+    pushToPath,
+    back
   }
 })

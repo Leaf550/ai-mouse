@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { NavigationItemConfig } from '@renderer/windows/main/stores/NavigationStore'
+import { FirstLevelTabItemConfig } from '@renderer/windows/main/stores/NavigationStore'
 
 interface Props {
-  itemConfig: NavigationItemConfig
+  itemConfig: FirstLevelTabItemConfig
 }
 
 const props = defineProps<Props>()

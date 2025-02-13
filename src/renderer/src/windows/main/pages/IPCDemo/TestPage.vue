@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import '@renderer/assets/demo_main.css'
 import Versions from '@renderer/components/Versions.vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const ipcHandle = () => {
   interface TestRes {
@@ -24,10 +26,15 @@ const ipcHandle = () => {
     console.log(user)
   })
 }
+
+const onJumpToErrorPageClick = () => {
+  router.push({
+    path: '/not-found'
+  })
+}
 </script>
 
 <template>
-  <img alt="logo" class="logo" src="@renderer/assets/electron.svg" />
   <div class="creator">Powered by electron-vite</div>
   <div class="text">
     Build an Electron app with
@@ -44,5 +51,6 @@ const ipcHandle = () => {
       <a target="_blank" rel="noreferrer" @click="ipcHandle">Test netAPIs</a>
     </div>
   </div>
+  <el-button @click="onJumpToErrorPageClick">jump to error page</el-button>
   <Versions />
 </template>
