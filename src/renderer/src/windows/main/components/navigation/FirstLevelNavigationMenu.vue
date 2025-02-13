@@ -31,6 +31,6 @@ const onItemClick = (index: number) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: rgb(47, 60, 70);
+  background-color: #2c2932;
 }
 </style>

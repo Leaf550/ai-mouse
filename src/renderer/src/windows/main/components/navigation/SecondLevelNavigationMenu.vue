@@ -63,12 +63,12 @@ const onSecondNavigationItemSelected = (index: number) => {
   }
 
   .secondLevelNavigationItem:hover {
-    background-color: rgb(242, 248, 252);
+    background-color: #faf6ff;
   }
 
   .secondLevelNavigationItemSelected {
-    background-color: rgb(242, 248, 252);
-    color: rgb(98, 192, 140);
+    background-color: #faf6ff;
+    color: #5b5891;
   }
 }
 </style>

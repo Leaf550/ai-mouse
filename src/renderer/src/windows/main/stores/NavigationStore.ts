@@ -90,6 +90,11 @@ const initialTabConfigs: FirstLevelTabItemConfig[] = [
         isSelected: false,
         title: '导航测试2',
         routerPath: '/debug/navigation_test'
+      },
+      {
+        isSelected: false,
+        title: '控件预览',
+        routerPath: '/debug/components_preview'
       }
     ]
   }

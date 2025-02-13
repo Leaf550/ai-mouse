@@ -20,6 +20,10 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/debug/navigation_test',
     component: () => import('@renderer/windows/main/pages/Debug/NavigationTestPage.vue')
+  },
+  {
+    path: '/debug/components_preview',
+    component: () => import('@renderer/windows/main/pages/Debug/ComponentsPreview.vue')
   }
 ]
 

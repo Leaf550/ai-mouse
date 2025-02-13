@@ -37,7 +37,7 @@ const props = defineProps<Props>()
 }
 
 .navigationItemSelected {
-  background-color: rgb(60, 68, 81);
+  background-color: rgb(60, 55, 73);
   color: rgb(255, 255, 255);
 }
 </style>
