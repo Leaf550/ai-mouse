@@ -202,7 +202,7 @@ export const useNavigationStore = defineStore('NavigationStore', () => {
     currentNavigationStack.value?.push(navigationItem)
   }
 
-  const pushToPath = (router: Router, path: string, query?: LocationQueryRaw) => {
+  const push = (router: Router, path: string, query?: LocationQueryRaw) => {
     pushToNavigationStack(path, query)
     if (!currentNavigationStackTopItem.value) {
       return
@@ -249,7 +249,7 @@ export const useNavigationStore = defineStore('NavigationStore', () => {
     currentSelectedFirstLevelTabItem,
     currentSecondTabsList,
     currentSelectedSecondLevelTabItem,
-    pushToPath,
+    push,
     back
   }
 })

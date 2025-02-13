@@ -33,7 +33,7 @@ const onTestMinusButtonClick = () => {
 }
 
 const pushButtonClick = () => {
-  navigationStore.pushToPath(router, '/debug/navigation_test', {
+  navigationStore.push(router, '/debug/navigation_test', {
     previousTest: testStore?.test
   })
 }
