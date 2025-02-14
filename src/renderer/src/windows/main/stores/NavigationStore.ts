@@ -1,10 +1,12 @@
 import { defineStore, StoreGeneric } from 'pinia'
 import { ref, computed } from 'vue'
-import { Router, LocationQueryRaw } from 'vue-router'
+import { Router, LocationQueryRaw, RouteRecordRaw } from 'vue-router'
+import { routeRecordsInAIGroup, routeRecordsInSettingsGroup, routeRecordsInDebugGroup } from '../router/routes'
 
 export interface NavigationStackItem {
   path: string
   navigationItemID: string
+  title: string
   query?: LocationQueryRaw
   store?: StoreGeneric
 }
@@ -24,85 +26,41 @@ export interface SecondLevelTabItemConfig extends TabItemConfig {
   navigationStack: NavigationStackItem[]
 }
 
+const routeRecordsToSecondLevelItemsWithoutNavigationStack = (routeRecords: RouteRecordRaw[]) => {
+  return routeRecords.map((record, index) => {
+    return {
+      isSelected: index === 0,
+      title: record.meta?.title ?? '',
+      routerPath: record.path
+    }
+  })
+}
+
 const initialTabConfigs: FirstLevelTabItemConfig[] = [
   {
     isSelected: true,
     title: 'AI智能体',
     iconName: 'Menu',
-    nextLevelItems: [
-      {
-        isSelected: true,
-        title: '智能问答',
-        routerPath: '/ai/ask'
-      },
-      {
-        isSelected: false,
-        title: '智能写作',
-        routerPath: '/ai/write'
-      },
-      {
-        isSelected: false,
-        title: '智能绘图',
-        routerPath: '/ai/paint'
-      },
-      {
-        isSelected: false,
-        title: '智能PPT',
-        routerPath: '/ai/slide_show'
-      },
-      {
-        isSelected: false,
-        title: '错误页面',
-        routerPath: '/not-found'
-      }
-    ]
+    nextLevelItems: routeRecordsToSecondLevelItemsWithoutNavigationStack(routeRecordsInAIGroup)
   },
   {
     isSelected: false,
     title: '设置',
     iconName: 'Setting',
-    nextLevelItems: [
-      {
-        isSelected: true,
-        title: '鼠标设置',
-        // routerPath: '/settings/mouse'
-        routerPath: '/ai/ask'
-      },
-      {
-        isSelected: false,
-        title: '界面设置',
-        // routerPath: '/settings/interface'
-        routerPath: '/not-found'
-      }
-    ]
+    nextLevelItems: routeRecordsToSecondLevelItemsWithoutNavigationStack(routeRecordsInSettingsGroup)
   },
   {
     isSelected: false,
     title: 'Debug',
     iconName: 'ChromeFilled',
-    nextLevelItems: [
-      {
-        isSelected: true,
-        title: '导航测试',
-        routerPath: '/debug/navigation_test'
-      },
-      {
-        isSelected: false,
-        title: '导航测试2',
-        routerPath: '/debug/navigation_test'
-      },
-      {
-        isSelected: false,
-        title: '控件预览',
-        routerPath: '/debug/components_preview'
-      }
-    ]
+    nextLevelItems: routeRecordsToSecondLevelItemsWithoutNavigationStack(routeRecordsInDebugGroup)
   }
 ].map((firstLevelItem, firstLevelItemIndex) => {
   firstLevelItem.nextLevelItems = firstLevelItem.nextLevelItems.map((secondLevelItem, secondLevelItemIndex) => {
     const navigationStack: NavigationStackItem[] = [
       {
         path: secondLevelItem.routerPath,
+        title: secondLevelItem.title,
         navigationItemID: `${firstLevelItemIndex}` + '-' + `${secondLevelItemIndex}`
       }
     ]
@@ -137,6 +95,8 @@ export const useNavigationStore = defineStore('NavigationStore', () => {
 
   const currentNavigationStack = computed(() => currentSelectedSecondLevelTabItem.value?.navigationStack)
 
+  const isCurrentNavigationStackTopItemRoot = computed(() => (currentNavigationStack.value?.length ?? 0) <= 1)
+
   const currentNavigationStackTopItem = computed(() => {
     const currentStack = currentNavigationStack.value
     if (!currentStack) {
@@ -147,6 +107,20 @@ export const useNavigationStore = defineStore('NavigationStore', () => {
     }
 
     return currentStack[currentStack.length - 1]
+  })
+
+  const currentNavigationStackSecondToTopItem = computed(() => {
+    if (isCurrentNavigationStackTopItemRoot.value) {
+      return undefined
+    }
+    const currentStack = currentNavigationStack.value
+    if (!currentStack) {
+      return undefined
+    }
+    if (currentStack.length < 2) {
+      return undefined
+    }
+    return currentStack[currentStack.length - 2]
   })
 
   const selectFirstLevelTabAt = (index: number, router?: Router) => {
@@ -198,17 +172,18 @@ export const useNavigationStore = defineStore('NavigationStore', () => {
     })
   }
 
-  const pushToNavigationStack = (path: string, query?: LocationQueryRaw) => {
+  const pushToNavigationStack = (path: string, title: string, query?: LocationQueryRaw) => {
     const navigationItem = {
       path,
-      query: query,
+      title,
+      query,
       navigationItemID: (currentNavigationStackTopItem.value?.navigationItemID ?? '') + path
     }
     currentNavigationStack.value?.push(navigationItem)
   }
 
   const push = (router: Router, path: string, query?: LocationQueryRaw) => {
-    pushToNavigationStack(path, query)
+    pushToNavigationStack(path, router.resolve(path).meta.title, query)
     if (!currentNavigationStackTopItem.value) {
       return
     }
@@ -248,7 +223,9 @@ export const useNavigationStore = defineStore('NavigationStore', () => {
     firstLevelTabSelectedIndex,
     secondLevelTabSelectedIndex,
     currentNavigationStack,
+    isCurrentNavigationStackTopItemRoot,
     currentNavigationStackTopItem,
+    currentNavigationStackSecondToTopItem,
     selectFirstLevelTabAt,
     selectSecondLevelTabAt,
     currentSelectedFirstLevelTabItem,

@@ -3,6 +3,7 @@
 import { useNavigationStore } from './stores/NavigationStore'
 import { useRouter } from 'vue-router'
 import NavigationView from './components/navigation/NavigationView.vue'
+import NavigationBar from './components/navigation/NavigationBar.vue'
 
 // onMounted(() => {
 const router = useRouter()
@@ -21,7 +22,9 @@ router.push({
   <div class="navigationArea">
     <NavigationView />
   </div>
-  <div class="appTitleBarArea"></div>
+  <div class="appTitleBarArea">
+    <NavigationBar />
+  </div>
   <div class="appContentArea">
     <RouterView :key="$route.fullPath" />
   </div>
